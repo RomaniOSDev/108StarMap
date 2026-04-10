@@ -3,33 +3,53 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 60;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3020648A2F890393008CA350 /* Color+StarMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3020646E2F890393008CA350 /* Color+StarMap.swift */; };
+		3020648B2F890393008CA350 /* View+StarMapStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3020646F2F890393008CA350 /* View+StarMapStyle.swift */; };
+		3020648C2F890393008CA350 /* StarMapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302064712F890393008CA350 /* StarMapModels.swift */; };
+		3020648D2F890393008CA350 /* DateFormatter+StarMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302064732F890393008CA350 /* DateFormatter+StarMap.swift */; };
+		3020648E2F890393008CA350 /* ExternalLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302064742F890393008CA350 /* ExternalLinks.swift */; };
+		3020648F2F890393008CA350 /* StarMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302064762F890393008CA350 /* StarMapViewModel.swift */; };
+		302064902F890393008CA350 /* StarMapComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302064782F890393008CA350 /* StarMapComponents.swift */; };
+		302064912F890393008CA350 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3020647A2F890393008CA350 /* OnboardingView.swift */; };
+		302064922F890393008CA350 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3020647B2F890393008CA350 /* SettingsView.swift */; };
+		302064932F890393008CA350 /* StarMapScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3020647C2F890393008CA350 /* StarMapScreens.swift */; };
+		302064942F890393008CA350 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3020647F2F890393008CA350 /* AppDelegate.swift */; };
+		302064952F890393008CA350 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302064812F890393008CA350 /* ContentView.swift */; };
+		302064962F890393008CA350 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302064872F890393008CA350 /* SceneDelegate.swift */; };
+		302064972F890393008CA350 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302064882F890393008CA350 /* ViewController.swift */; };
+		302064982F890393008CA350 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 302064802F890393008CA350 /* Assets.xcassets */; };
+		3020649A2F890393008CA350 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 302064842F890393008CA350 /* LaunchScreen.storyboard */; };
+		3020649B2F890393008CA350 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 302064862F890393008CA350 /* Main.storyboard */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		28ABF8A72BF911CE49DB5D41 /* Pods-108StarMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-108StarMap.debug.xcconfig"; path = "Target Support Files/Pods-108StarMap/Pods-108StarMap.debug.xcconfig"; sourceTree = "<group>"; };
+		3020646E2F890393008CA350 /* Color+StarMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+StarMap.swift"; sourceTree = "<group>"; };
+		3020646F2F890393008CA350 /* View+StarMapStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+StarMapStyle.swift"; sourceTree = "<group>"; };
+		302064712F890393008CA350 /* StarMapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapModels.swift; sourceTree = "<group>"; };
+		302064732F890393008CA350 /* DateFormatter+StarMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+StarMap.swift"; sourceTree = "<group>"; };
+		302064742F890393008CA350 /* ExternalLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinks.swift; sourceTree = "<group>"; };
+		302064762F890393008CA350 /* StarMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapViewModel.swift; sourceTree = "<group>"; };
+		302064782F890393008CA350 /* StarMapComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapComponents.swift; sourceTree = "<group>"; };
+		3020647A2F890393008CA350 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		3020647B2F890393008CA350 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3020647C2F890393008CA350 /* StarMapScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapScreens.swift; sourceTree = "<group>"; };
+		3020647F2F890393008CA350 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		302064802F890393008CA350 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		302064812F890393008CA350 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		302064822F890393008CA350 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		302064832F890393008CA350 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		302064852F890393008CA350 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		302064872F890393008CA350 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		302064882F890393008CA350 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		746AD1BE2F7BF5B20076A047 /* 108StarMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 108StarMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		865E4608C428A7A62E94BE98 /* Pods_108StarMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_108StarMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D39C9A1DE0561FA86F089225 /* Pods-108StarMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-108StarMap.release.xcconfig"; path = "Target Support Files/Pods-108StarMap/Pods-108StarMap.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		746AD1D02F7BF5B20076A047 /* Exceptions for "108StarMap" folder in "108StarMap" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 746AD1BD2F7BF5B20076A047 /* 108StarMap */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		746AD1C02F7BF5B20076A047 /* 108StarMap */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				746AD1D02F7BF5B20076A047 /* Exceptions for "108StarMap" folder in "108StarMap" target */,
-			);
-			path = 108StarMap;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		746AD1BB2F7BF5B20076A047 /* Frameworks */ = {
@@ -42,11 +62,103 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2AA84DB6C08569F2E62A3CE9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				28ABF8A72BF911CE49DB5D41 /* Pods-108StarMap.debug.xcconfig */,
+				D39C9A1DE0561FA86F089225 /* Pods-108StarMap.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		302064702F890393008CA350 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3020646E2F890393008CA350 /* Color+StarMap.swift */,
+				3020646F2F890393008CA350 /* View+StarMapStyle.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		302064722F890393008CA350 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				302064712F890393008CA350 /* StarMapModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		302064752F890393008CA350 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				302064732F890393008CA350 /* DateFormatter+StarMap.swift */,
+				302064742F890393008CA350 /* ExternalLinks.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		302064772F890393008CA350 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				302064762F890393008CA350 /* StarMapViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		302064792F890393008CA350 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				302064782F890393008CA350 /* StarMapComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		3020647D2F890393008CA350 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				3020647A2F890393008CA350 /* OnboardingView.swift */,
+				3020647B2F890393008CA350 /* SettingsView.swift */,
+				3020647C2F890393008CA350 /* StarMapScreens.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		3020647E2F890393008CA350 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				302064792F890393008CA350 /* Components */,
+				3020647D2F890393008CA350 /* Screens */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		302064892F890393008CA350 /* 108StarMap */ = {
+			isa = PBXGroup;
+			children = (
+				302064702F890393008CA350 /* Extensions */,
+				302064722F890393008CA350 /* Models */,
+				302064752F890393008CA350 /* Utils */,
+				302064772F890393008CA350 /* ViewModels */,
+				3020647E2F890393008CA350 /* Views */,
+				3020647F2F890393008CA350 /* AppDelegate.swift */,
+				302064802F890393008CA350 /* Assets.xcassets */,
+				302064812F890393008CA350 /* ContentView.swift */,
+				302064822F890393008CA350 /* Info.plist */,
+				302064842F890393008CA350 /* LaunchScreen.storyboard */,
+				302064862F890393008CA350 /* Main.storyboard */,
+				302064872F890393008CA350 /* SceneDelegate.swift */,
+				302064882F890393008CA350 /* ViewController.swift */,
+			);
+			path = 108StarMap;
+			sourceTree = "<group>";
+		};
 		746AD1B52F7BF5B20076A047 = {
 			isa = PBXGroup;
 			children = (
-				746AD1C02F7BF5B20076A047 /* 108StarMap */,
+				302064892F890393008CA350 /* 108StarMap */,
 				746AD1BF2F7BF5B20076A047 /* Products */,
+				2AA84DB6C08569F2E62A3CE9 /* Pods */,
+				787F163903A27BDE938B19D5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +170,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		787F163903A27BDE938B19D5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				865E4608C428A7A62E94BE98 /* Pods_108StarMap.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -65,6 +185,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 746AD1D12F7BF5B20076A047 /* Build configuration list for PBXNativeTarget "108StarMap" */;
 			buildPhases = (
+				695F1F19D5BD81C34F19281A /* [CP] Check Pods Manifest.lock */,
 				746AD1BA2F7BF5B20076A047 /* Sources */,
 				746AD1BB2F7BF5B20076A047 /* Frameworks */,
 				746AD1BC2F7BF5B20076A047 /* Resources */,
@@ -73,12 +194,7 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				746AD1C02F7BF5B20076A047 /* 108StarMap */,
-			);
 			name = 108StarMap;
-			packageProductDependencies = (
-			);
 			productName = 108StarMap;
 			productReference = 746AD1BE2F7BF5B20076A047 /* 108StarMap.app */;
 			productType = "com.apple.product-type.application";
@@ -99,6 +215,7 @@
 				};
 			};
 			buildConfigurationList = 746AD1B92F7BF5B20076A047 /* Build configuration list for PBXProject "108StarMap" */;
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -106,8 +223,6 @@
 				Base,
 			);
 			mainGroup = 746AD1B52F7BF5B20076A047;
-			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = 746AD1BF2F7BF5B20076A047 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -122,24 +237,86 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				302064982F890393008CA350 /* Assets.xcassets in Resources */,
+				3020649A2F890393008CA350 /* LaunchScreen.storyboard in Resources */,
+				3020649B2F890393008CA350 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		695F1F19D5BD81C34F19281A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-108StarMap-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		746AD1BA2F7BF5B20076A047 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3020648A2F890393008CA350 /* Color+StarMap.swift in Sources */,
+				3020648B2F890393008CA350 /* View+StarMapStyle.swift in Sources */,
+				3020648C2F890393008CA350 /* StarMapModels.swift in Sources */,
+				3020648D2F890393008CA350 /* DateFormatter+StarMap.swift in Sources */,
+				3020648E2F890393008CA350 /* ExternalLinks.swift in Sources */,
+				3020648F2F890393008CA350 /* StarMapViewModel.swift in Sources */,
+				302064902F890393008CA350 /* StarMapComponents.swift in Sources */,
+				302064912F890393008CA350 /* OnboardingView.swift in Sources */,
+				302064922F890393008CA350 /* SettingsView.swift in Sources */,
+				302064932F890393008CA350 /* StarMapScreens.swift in Sources */,
+				302064942F890393008CA350 /* AppDelegate.swift in Sources */,
+				302064952F890393008CA350 /* ContentView.swift in Sources */,
+				302064962F890393008CA350 /* SceneDelegate.swift in Sources */,
+				302064972F890393008CA350 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		302064842F890393008CA350 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				302064832F890393008CA350 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		302064862F890393008CA350 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				302064852F890393008CA350 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		746AD1D22F7BF5B20076A047 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28ABF8A72BF911CE49DB5D41 /* Pods-108StarMap.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -147,30 +324,37 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = 108StarMap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Tonight's Sky - StarMap";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mycompany.-08StarMap";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sev.t0nsk7st4r;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		746AD1D32F7BF5B20076A047 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D39C9A1DE0561FA86F089225 /* Pods-108StarMap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -178,25 +362,31 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = 108StarMap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Tonight's Sky - StarMap";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mycompany.-08StarMap";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sev.t0nsk7st4r;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

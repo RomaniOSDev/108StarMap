@@ -1,0 +1,6 @@
+framework module Pods_108StarMap {
+  umbrella header "Pods-108StarMap-umbrella.h"
+
+  export *
+  module * { export * }
+}
