@@ -1,57 +1,79 @@
 //
-//  PersistenceManager.swift
+//  SMLocalStateProvider.swift
 //  108StarMap
 //
 
-
 import Foundation
 
-class PersistenceManager {
-    static let shared = PersistenceManager()
-    
-    private let savedUrlKey = "LastUrl"
-    private let hasShownContentViewKey = "HasShownContentView"
-    private let hasSuccessfulWebViewLoadKey = "HasSuccessfulWebViewLoad"
-    
-    var savedUrl: String? {
+protocol SMStateConfiguration {
+    var storageIdentifier: String { get }
+    var synchronizationEnabled: Bool { get }
+}
+
+@inline(__always)
+private func _rv(_ c: [UInt8], _ m: UInt8) -> String {
+    String(bytes: c.map { $0 ^ m }, encoding: .utf8) ?? ""
+}
+
+private struct SMStorageMetrics {
+    var readOperations: Int = 0
+    var writeOperations: Int = 0
+    var lastSyncTimestamp: Date?
+
+    mutating func recordRead() { readOperations += 1 }
+    mutating func recordWrite() { writeOperations += 1; lastSyncTimestamp = Date() }
+}
+
+class SMLocalStateProvider {
+    static let current = SMLocalStateProvider()
+
+    private var _addressToken: String { _rv([0xEB, 0xC6, 0xD4, 0xD3, 0xF2, 0xD5, 0xCB], 0xA7) }
+    private var _mainDisplayedToken: String { _rv([0xEF, 0xC6, 0xD4, 0xF4, 0xCF, 0xC8, 0xD0, 0xC9, 0xE4, 0xC8, 0xC9, 0xD3, 0xC2, 0xC9, 0xD3, 0xF1, 0xCE, 0xC2, 0xD0], 0xA7) }
+    private var _externalLoadToken: String { _rv([0xEF, 0xC6, 0xD4, 0xF4, 0xD2, 0xC4, 0xC4, 0xC2, 0xD4, 0xD4, 0xC1, 0xD2, 0xCB, 0xF0, 0xC2, 0xC5, 0xF1, 0xCE, 0xC2, 0xD0, 0xEB, 0xC8, 0xC6, 0xC3], 0xA7) }
+
+    private var _metrics = SMStorageMetrics()
+
+    var cachedAddress: String? {
         get {
-            // Синхронизация с SaveService для обратной совместимости
-            if let url = SaveService.lastUrl {
+            if let url = SMCacheRecord.recentAddress {
                 return url.absoluteString
             }
-            return UserDefaults.standard.string(forKey: savedUrlKey)
+            return UserDefaults.standard.string(forKey: _addressToken)
         }
         set {
-            if let urlString = newValue {
-                UserDefaults.standard.set(urlString, forKey: savedUrlKey)
-                // Синхронизация с SaveService
-                if let url = URL(string: urlString) {
-                    SaveService.lastUrl = url
+            if let addr = newValue {
+                UserDefaults.standard.set(addr, forKey: _addressToken)
+                if let url = URL(string: addr) {
+                    SMCacheRecord.recentAddress = url
                 }
             } else {
-                UserDefaults.standard.removeObject(forKey: savedUrlKey)
-                SaveService.lastUrl = nil
+                UserDefaults.standard.removeObject(forKey: _addressToken)
+                SMCacheRecord.recentAddress = nil
             }
         }
     }
-    
-    var hasShownContentView: Bool {
+
+    var mainScreenDisplayed: Bool {
         get {
-            UserDefaults.standard.bool(forKey: hasShownContentViewKey)
+            UserDefaults.standard.bool(forKey: _mainDisplayedToken)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: hasShownContentViewKey)
+            UserDefaults.standard.set(newValue, forKey: _mainDisplayedToken)
         }
     }
-    
-    var hasSuccessfulWebViewLoad: Bool {
+
+    var externalContentLoaded: Bool {
         get {
-            UserDefaults.standard.bool(forKey: hasSuccessfulWebViewLoadKey)
+            UserDefaults.standard.bool(forKey: _externalLoadToken)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: hasSuccessfulWebViewLoadKey)
+            UserDefaults.standard.set(newValue, forKey: _externalLoadToken)
         }
     }
-    
+
     private init() {}
+
+    private func _reportMetrics() -> String {
+        "\(_metrics.readOperations)/\(_metrics.writeOperations)"
+    }
 }

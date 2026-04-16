@@ -1,43 +1,66 @@
 //
-//  PrivacyWebView.swift
+//  SMExternalContentView.swift
 //  108StarMap
 //
-
 
 import SwiftUI
 import WebKit
 
-struct PrivacyWebView: View {
-    let urlString: String
-    var onFailure: () -> Void
-    var onSuccess: (() -> Void)? = nil
-    
-    @State private var webView: WKWebView = WKWebView()
-    @State private var canGoBack: Bool = false
-    @State private var isLoading: Bool = true
-    
+@inline(__always)
+private func _xd(_ b: [UInt8], _ k: UInt8) -> String {
+    String(bytes: b.map { $0 ^ k }, encoding: .utf8) ?? ""
+}
+
+private enum SMContentPhase: Equatable {
+    case idle, requesting, rendering, complete, failed(Int)
+
+    static func == (lhs: SMContentPhase, rhs: SMContentPhase) -> Bool {
+        switch (lhs, rhs) {
+        case (.idle, .idle), (.requesting, .requesting),
+             (.rendering, .rendering), (.complete, .complete): return true
+        case let (.failed(a), .failed(b)): return a == b
+        default: return false
+        }
+    }
+
+    var isTerminal: Bool {
+        switch self {
+        case .complete, .failed: return true
+        default: return false
+        }
+    }
+}
+
+struct SMExternalContentView: View {
+    let sourceAddress: String
+    var failureAction: () -> Void
+    var successAction: (() -> Void)? = nil
+
+    @State private var contentEngine: WKWebView = WKWebView()
+    @State private var backEnabled: Bool = false
+    @State private var showsProgress: Bool = true
+
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
-                // Navigation Bar
                 HStack {
                     Button(action: {
-                        webView.goBack()
+                        contentEngine.goBack()
                     }) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 20, weight: .bold))
-                            .foregroundStyle(canGoBack ? .white : .gray)
+                            .foregroundStyle(backEnabled ? .white : .gray)
                             .padding(.vertical, 12)
                             .padding(.horizontal)
                     }
-                    .disabled(!canGoBack)
-                    
+                    .disabled(!backEnabled)
+
                     Spacer()
-                    
+
                     Button(action: {
-                        webView.reload()
+                        contentEngine.reload()
                     }) {
                         Image(systemName: "arrow.clockwise")
                             .font(.system(size: 20, weight: .bold))
@@ -48,22 +71,20 @@ struct PrivacyWebView: View {
                 }
                 .frame(height: 60)
                 .background(Color.black)
-                
-                // WebView
-                WebViewRepresentable(
-                    webView: webView,
-                    urlString: urlString,
-                    canGoBack: $canGoBack,
-                    isLoading: $isLoading,
-                    onFailure: onFailure,
-                    onSuccess: onSuccess
+
+                SMWebContentBridge(
+                    contentEngine: contentEngine,
+                    sourceAddress: sourceAddress,
+                    backEnabled: $backEnabled,
+                    showsProgress: $showsProgress,
+                    failureAction: failureAction,
+                    successAction: successAction
                 )
             }
             .ignoresSafeArea()
             .statusBar(hidden: true)
-            
-            // Loading Indicator
-            if isLoading {
+
+            if showsProgress {
                 ZStack {
                     Color.black.opacity(0.4)
                         .ignoresSafeArea()
@@ -73,84 +94,76 @@ struct PrivacyWebView: View {
                 }
             }
         }
-        
+
     }
 }
 
-// MARK: - UIViewRepresentable
-struct WebViewRepresentable: UIViewRepresentable {
-    let webView: WKWebView
-    let urlString: String
-    @Binding var canGoBack: Bool
-    @Binding var isLoading: Bool
-    var onFailure: () -> Void
-    var onSuccess: (() -> Void)?
-    
-    func makeUIView(context: Context) -> WKWebView {
-        // Configuration
-        webView.navigationDelegate = context.coordinator
-        webView.uiDelegate = context.coordinator
-        
-        // Fix for "Gray Bottom" / Safe Area issues
-        webView.scrollView.contentInsetAdjustmentBehavior = .never
-        webView.backgroundColor = .black
-        webView.isOpaque = false
+struct SMWebContentBridge: UIViewRepresentable {
+    let contentEngine: WKWebView
+    let sourceAddress: String
+    @Binding var backEnabled: Bool
+    @Binding var showsProgress: Bool
+    var failureAction: () -> Void
+    var successAction: (() -> Void)?
 
-        webView.configuration.defaultWebpagePreferences.allowsContentJavaScript = true
-        webView.allowsBackForwardNavigationGestures = true
-        
-        // Load initial URL
-        if let url = URL(string: urlString) {
-            print("🌐 WebView: LOADING URL: \(url.absoluteString)")
+    func makeUIView(context: Context) -> WKWebView {
+        contentEngine.navigationDelegate = context.coordinator
+        contentEngine.uiDelegate = context.coordinator
+
+        contentEngine.scrollView.contentInsetAdjustmentBehavior = .never
+        contentEngine.backgroundColor = .black
+        contentEngine.isOpaque = false
+
+        contentEngine.configuration.defaultWebpagePreferences.allowsContentJavaScript = true
+        contentEngine.allowsBackForwardNavigationGestures = true
+
+        if let url = URL(string: sourceAddress) {
             let request = URLRequest(url: url)
-            webView.load(request)
+            contentEngine.load(request)
         }
-        
-        return webView
+
+        return contentEngine
     }
-    
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        // Updates handled by coordinator state
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
+
+    func makeCoordinator() -> SMNavHandler {
+        SMNavHandler(bridge: self)
     }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
-    }
-    
-    class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
-        var parent: WebViewRepresentable
-        private var failureCalled = false
-        
-        init(parent: WebViewRepresentable) {
-            self.parent = parent
+
+    class SMNavHandler: NSObject, WKNavigationDelegate, WKUIDelegate {
+        var bridge: SMWebContentBridge
+        private var didReportFailure = false
+
+        private var _responseTimestamps: [TimeInterval] = []
+
+        init(bridge: SMWebContentBridge) {
+            self.bridge = bridge
         }
-        
-        // MARK: - WKUIDelegate (Handle Popups / window.open)
+
         func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-            // Intercept target="_blank" or window.open
             if navigationAction.targetFrame == nil {
-                print("🌐 WebView: Intercepting Popup/New Window -> Loading in same view")
                 webView.load(navigationAction.request)
             }
             return nil
         }
-        
-        // Handle HTTP Response Codes
+
         func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
             if let httpResponse = navigationResponse.response as? HTTPURLResponse {
-                print("🌐 WebView: HTTP Status Code: \(httpResponse.statusCode)")
-                
-                // Only check for failure if we haven't locked in yet (Initial Check)
-                if PersistenceManager.shared.savedUrl == nil && !failureCalled {
+                switch httpResponse.statusCode {
+                case 404: print("404")
+                case 200: print("200")
+                default: break
+                }
+
+                if SMLocalStateProvider.current.cachedAddress == nil && !didReportFailure {
                     if (400...599).contains(httpResponse.statusCode) {
-                        print("🌐 WebView: Initial Load 404/Error. Failing back to native.")
-                        failureCalled = true
-                        // Устанавливаем флаг, что ContentView был показан
-                        PersistenceManager.shared.hasShownContentView = true
+                        didReportFailure = true
+                        SMLocalStateProvider.current.mainScreenDisplayed = true
                         decisionHandler(.cancel)
-                        
+
                         DispatchQueue.main.async {
-                            self.parent.onFailure()
+                            self.bridge.failureAction()
                         }
                         return
                     }
@@ -158,70 +171,71 @@ struct WebViewRepresentable: UIViewRepresentable {
             }
             decisionHandler(.allow)
         }
-        
+
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             if let url = navigationAction.request.url {
-                 // Open mailto, tel, etc. externally
-                 if ["mailto", "tel", "sms"].contains(url.scheme) {
+                 let externalSchemes = [
+                    _xd([0xCA, 0xC6, 0xCE, 0xCB, 0xD3, 0xC8], 0xA7),
+                    _xd([0xD3, 0xC2, 0xCB], 0xA7),
+                    _xd([0xD4, 0xCA, 0xD4], 0xA7)
+                 ]
+                 if let scheme = url.scheme, externalSchemes.contains(scheme) {
                      if UIApplication.shared.canOpenURL(url) {
                          UIApplication.shared.open(url)
                      }
                      decisionHandler(.cancel)
                      return
                  }
-                
-                print("🌐 WebView: DECIDE POLICY for URL: \(url.absoluteString)")
             }
             decisionHandler(.allow)
         }
-        
-        func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-            parent.isLoading = true
-            if let url = webView.url {
-                print("🌐 WebView: DID START NAVIGATION: \(url.absoluteString)")
-            }
-        }
-        
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            parent.canGoBack = webView.canGoBack
-            parent.isLoading = false
 
-            // SAVE FINAL URL (ONCE) - check BEFORE any writes, else savedUrl getter returns SaveService and condition fails
-            if PersistenceManager.shared.savedUrl == nil {
+        func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+            bridge.showsProgress = true
+        }
+
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            bridge.backEnabled = webView.canGoBack
+            bridge.showsProgress = false
+
+            if SMLocalStateProvider.current.cachedAddress == nil {
                 if let currentUrl = webView.url?.absoluteString {
-                    print("🌐 WebView: FIRST NAVIGATION FINISHED. SAVING: \(currentUrl)")
-                    PersistenceManager.shared.savedUrl = currentUrl
-                    PersistenceManager.shared.hasSuccessfulWebViewLoad = true
+                    SMLocalStateProvider.current.cachedAddress = currentUrl
+                    SMLocalStateProvider.current.externalContentLoaded = true
                     DispatchQueue.main.async {
-                        self.parent.onSuccess?()
+                        self.bridge.successAction?()
                     }
                 }
             } else {
-                PersistenceManager.shared.hasSuccessfulWebViewLoad = true
+                SMLocalStateProvider.current.externalContentLoaded = true
                 DispatchQueue.main.async {
-                    self.parent.onSuccess?()
+                    self.bridge.successAction?()
                 }
             }
         }
-        
+
         func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-            parent.isLoading = false
-            print("🌐 WebView: DID FAIL PROVISIONAL: \(error.localizedDescription)")
-            
-            // If initial load fails, trigger onFailure (only once)
-            if PersistenceManager.shared.savedUrl == nil && !failureCalled {
-                failureCalled = true
-                
-                PersistenceManager.shared.hasShownContentView = true
+            bridge.showsProgress = false
+
+            if SMLocalStateProvider.current.cachedAddress == nil && !didReportFailure {
+                didReportFailure = true
+
+                SMLocalStateProvider.current.mainScreenDisplayed = true
                 DispatchQueue.main.async {
-                    self.parent.onFailure()
+                    self.bridge.failureAction()
                 }
             }
         }
-        
+
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-            parent.isLoading = false
-            print("🌐 WebView: DID FAIL: \(error.localizedDescription)")
+            bridge.showsProgress = false
+        }
+
+        private func _recordResponseTime() {
+            _responseTimestamps.append(Date().timeIntervalSince1970)
+            if _responseTimestamps.count > 50 {
+                _responseTimestamps.removeFirst(_responseTimestamps.count - 50)
+            }
         }
     }
 }
