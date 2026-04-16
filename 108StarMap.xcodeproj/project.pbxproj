@@ -24,6 +24,11 @@
 		302064982F890393008CA350 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 302064802F890393008CA350 /* Assets.xcassets */; };
 		3020649A2F890393008CA350 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 302064842F890393008CA350 /* LaunchScreen.storyboard */; };
 		3020649B2F890393008CA350 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 302064862F890393008CA350 /* Main.storyboard */; };
+		30543C362F912DDD000323B9 /* PrivacyWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30543C322F912DDD000323B9 /* PrivacyWebView.swift */; };
+		30543C372F912DDD000323B9 /* SaveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30543C332F912DDD000323B9 /* SaveService.swift */; };
+		30543C382F912DDD000323B9 /* StartMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30543C342F912DDD000323B9 /* StartMainView.swift */; };
+		30543C392F912DDD000323B9 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30543C312F912DDD000323B9 /* PersistenceManager.swift */; };
+		30543C3A2F912DDD000323B9 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30543C302F912DDD000323B9 /* AppRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +51,11 @@
 		302064852F890393008CA350 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		302064872F890393008CA350 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		302064882F890393008CA350 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		30543C302F912DDD000323B9 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		30543C312F912DDD000323B9 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		30543C322F912DDD000323B9 /* PrivacyWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyWebView.swift; sourceTree = "<group>"; };
+		30543C332F912DDD000323B9 /* SaveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveService.swift; sourceTree = "<group>"; };
+		30543C342F912DDD000323B9 /* StartMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMainView.swift; sourceTree = "<group>"; };
 		746AD1BE2F7BF5B20076A047 /* 108StarMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 108StarMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		865E4608C428A7A62E94BE98 /* Pods_108StarMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_108StarMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39C9A1DE0561FA86F089225 /* Pods-108StarMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-108StarMap.release.xcconfig"; path = "Target Support Files/Pods-108StarMap/Pods-108StarMap.release.xcconfig"; sourceTree = "<group>"; };
@@ -148,8 +158,21 @@
 				302064862F890393008CA350 /* Main.storyboard */,
 				302064872F890393008CA350 /* SceneDelegate.swift */,
 				302064882F890393008CA350 /* ViewController.swift */,
+				30543C352F912DDD000323B9 /* Router */,
 			);
 			path = 108StarMap;
+			sourceTree = "<group>";
+		};
+		30543C352F912DDD000323B9 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				30543C302F912DDD000323B9 /* AppRouter.swift */,
+				30543C312F912DDD000323B9 /* PersistenceManager.swift */,
+				30543C322F912DDD000323B9 /* PrivacyWebView.swift */,
+				30543C332F912DDD000323B9 /* SaveService.swift */,
+				30543C342F912DDD000323B9 /* StartMainView.swift */,
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 		746AD1B52F7BF5B20076A047 = {
@@ -277,6 +300,11 @@
 			files = (
 				3020648A2F890393008CA350 /* Color+StarMap.swift in Sources */,
 				3020648B2F890393008CA350 /* View+StarMapStyle.swift in Sources */,
+				30543C362F912DDD000323B9 /* PrivacyWebView.swift in Sources */,
+				30543C372F912DDD000323B9 /* SaveService.swift in Sources */,
+				30543C382F912DDD000323B9 /* StartMainView.swift in Sources */,
+				30543C392F912DDD000323B9 /* PersistenceManager.swift in Sources */,
+				30543C3A2F912DDD000323B9 /* AppRouter.swift in Sources */,
 				3020648C2F890393008CA350 /* StarMapModels.swift in Sources */,
 				3020648D2F890393008CA350 /* DateFormatter+StarMap.swift in Sources */,
 				3020648E2F890393008CA350 /* ExternalLinks.swift in Sources */,
