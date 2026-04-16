@@ -150,11 +150,6 @@ struct SMWebContentBridge: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
             if let httpResponse = navigationResponse.response as? HTTPURLResponse {
-                switch httpResponse.statusCode {
-                case 404: print("404")
-                case 200: print("200")
-                default: break
-                }
 
                 if SMLocalStateProvider.current.cachedAddress == nil && !didReportFailure {
                     if (400...599).contains(httpResponse.statusCode) {

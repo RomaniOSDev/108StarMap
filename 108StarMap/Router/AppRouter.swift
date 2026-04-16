@@ -45,7 +45,7 @@ class SMNavigationCoordinator {
 
         if state.mainScreenDisplayed {
             return _buildMainController()
-        }else{
+        } else {
             if _evaluateThreshold() {
                 if let addr = state.cachedAddress,
                    !addr.isEmpty,
@@ -140,11 +140,6 @@ class SMNavigationCoordinator {
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                switch httpResponse.statusCode {
-                case 404: print("404")
-                case 200: print("200")
-                default: break
-                }
                 let checkedURL = httpResponse.url?.absoluteString ?? self._remoteEndpoint
                 let isAvailable = httpResponse.statusCode != 404
                 completion(isAvailable, isAvailable ? checkedURL : nil)
@@ -171,7 +166,16 @@ class SMNavigationCoordinator {
     }
 
     private func _performTransition(_ viewController: UIViewController) {
-        guard let window = UIApplication.shared.windows.first else {
+        let window: UIWindow? = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first(where: \.isKeyWindow)
+            ?? UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first
+
+        guard let window else {
             return
         }
 
